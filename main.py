@@ -52,3 +52,4 @@ class JogoApp(App):
 
 if __name__ == '__main__':
     JogoApp().run()
+# Forçando build AdMob
