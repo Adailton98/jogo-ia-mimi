@@ -14,8 +14,9 @@ from kivy.graphics import Color, Rectangle, Ellipse, Triangle, InstructionGroup
 from kivy.clock import Clock
 from kivy.utils import platform
 
-# ID DO ADSENSE / ADMOB DO USUÁRIO
-ADMOB_PUBLISHER_ID = "pub-3118010994727094"
+# Chave oficial do seu bloco de anúncios (com a barra '/')
+ADMOB_REWARDED_ID = "ca-app-pub-3118010994727094/6454772833"
+
 
 SAVE_FILE = "save_progresso.json"
 AUTORES = "Adailton Santos e Grazzy Santos"
