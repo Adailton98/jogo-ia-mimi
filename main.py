@@ -1,4 +1,4 @@
-# CONFIGURAÇÃO GRÁFICA OTIMIZADA PARA TERMINAL MOBILE
+# CONFIGURAÇÃO GRÁFICA OTIMIZADA PARA TERMINAL E MOBILE
 from kivy.config import Config
 Config.set('graphics', 'resizable', 'True')
 
@@ -10,14 +10,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
-from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, Ellipse, Triangle, InstructionGroup
 from kivy.clock import Clock
+from kivy.utils import platform
 
 # ID DO ADSENSE / ADMOB DO USUÁRIO
 ADMOB_PUBLISHER_ID = "pub-3118010994727094"
-
-Window.size = (360, 640)
 
 SAVE_FILE = "save_progresso.json"
 AUTORES = "Adailton Santos e Grazzy Santos"
@@ -90,7 +88,7 @@ class CustomScreen(Screen):
         self.bg_group.add(Color(0.08, 0.10, 0.18, 1))
         self.bg_group.add(Rectangle(pos=(0, 0), size=(w, h)))
         self.bg_group.add(Color(0.95, 0.95, 0.85, 0.9))
-        self.bg_group.add(Ellipse(pos=(w * 0.75, h * 0.80), size=(60, 60)))
+        self.bg_group.add(Ellipse(pos=(w * 0.75, h * 0.80), size=(w * 0.15, w * 0.15)))
         self.bg_group.add(Color(0.15, 0.18, 0.28, 1))
         self.bg_group.add(Triangle(points=[0, 0, w * 0.35, h * 0.35, w * 0.7, 0]))
         self.bg_group.add(Triangle(points=[w * 0.3, 0, w * 0.7, h * 0.40, w, 0]))
@@ -166,7 +164,8 @@ class JogoScreen(CustomScreen):
         self.lbl_feedback = Label(text="", size_hint_y=0.08, font_size='14sp', bold=True)
         self.layout.add_widget(self.lbl_feedback)
         
-        self.lbl_pergunta = Label(text="", size_hint_y=0.28, font_size='15sp', text_size=(320, None), halign='center', color=COLOR_TEXT)
+        self.lbl_pergunta = Label(text="", size_hint_y=0.28, font_size='15sp', text_size=(None, None), halign='center', color=COLOR_TEXT)
+        self.lbl_pergunta.bind(size=self._atualizar_text_size)
         self.layout.add_widget(self.lbl_pergunta)
         
         self.botoes_opcoes = []
@@ -177,6 +176,9 @@ class JogoScreen(CustomScreen):
             self.layout.add_widget(btn)
             
         self.add_widget(self.layout)
+
+    def _atualizar_text_size(self, instance, value):
+        instance.text_size = (instance.width * 0.9, None)
 
     def voltar_menu(self, instance):
         self.manager.current = 'menu'
@@ -200,18 +202,18 @@ class JogoScreen(CustomScreen):
         for i, opt in enumerate(q["opcoes"]):
             self.botoes_opcoes[i].text = opt
             self.botoes_opcoes[i].opcao_id = i
-            self.boton_color = COLOR_BTN
             self.botoes_opcoes[i].background_color = COLOR_BTN
 
     def solicitar_ajuda(self, instance):
         if self.bloqueado:
             return
             
+        # Exibição de anúncio simulado ou nativo
         content = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        lbl_ad = Label(text=f"📺 Carregando AdMob...\nPublisher: {ADMOB_PUBLISHER_ID}\nAguarde 3s", halign='center', font_size='14sp')
+        lbl_ad = Label(text=f"📺 Exibindo Anúncio AdMob...\nID: {ADMOB_PUBLISHER_ID}\nAguarde a recompensa...", halign='center', font_size='14sp')
         content.add_widget(lbl_ad)
         
-        popup = Popup(title='Recompensa AdMob', content=content, size_hint=(0.9, 0.4), auto_dismiss=False)
+        popup = Popup(title='AdMob Rewards', content=content, size_hint=(0.85, 0.4), auto_dismiss=False)
         popup.open()
         
         Clock.schedule_once(lambda dt: self.concluir_anuncio(popup), 3.0)
@@ -221,12 +223,12 @@ class JogoScreen(CustomScreen):
         dica_texto = PERGUNTAS[self.indice]["dica"]
         
         content = BoxLayout(orientation='vertical', padding=15, spacing=10)
-        lbl_dica = Label(text=f"DICA LIBERADA:\n\n{dica_texto}", halign='center', font_size='14sp', text_size=(280, None))
-        btn_fechar = Button(text="OK", size_hint_y=0.4, background_color=COLOR_BTN)
+        lbl_dica = Label(text=f"DICA LIBERADA:\n\n{dica_texto}", halign='center', font_size='14sp', size_hint_y=0.7)
+        btn_fechar = Button(text="OK", size_hint_y=0.3, background_color=COLOR_BTN)
         content.add_widget(lbl_dica)
         content.add_widget(btn_fechar)
         
-        popup_dica = Popup(title='Sucesso', content=content, size_hint=(0.9, 0.5))
+        popup_dica = Popup(title='Sucesso', content=content, size_hint=(0.85, 0.45))
         btn_fechar.bind(on_release=popup_dica.dismiss)
         popup_dica.open()
         
@@ -243,12 +245,12 @@ class JogoScreen(CustomScreen):
         if instance.opcao_id == correta_id:
             self.pontos += 1
             instance.background_color = COLOR_CORRECT
-            self.lbl_feedback.text = "CORRETO! "
+            self.lbl_feedback.text = "CORRETO!"
             self.lbl_feedback.color = COLOR_CORRECT
         else:
             instance.background_color = COLOR_WRONG
             self.botoes_opcoes[correta_id].background_color = COLOR_CORRECT
-            self.lbl_feedback.text = "INCORRETO! "
+            self.lbl_feedback.text = "INCORRETO!"
             self.lbl_feedback.color = COLOR_WRONG
             
         Clock.schedule_once(self.avancar_pergunta, 1.2)
@@ -295,4 +297,3 @@ class JogoLogicaApp(App):
 
 if __name__ == "__main__":
     JogoLogicaApp().run()
-
