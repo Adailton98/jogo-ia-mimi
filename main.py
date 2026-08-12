@@ -1,18 +1,27 @@
-# CONFIGURAÇÃO GRÁFICA OTIMIZADA PARA TERMINAL E MOBILE
-from kivy.config import Config
-Config.set('graphics', 'resizable', 'True')
+import traceback
+import sys
 
-import json
-import os
-from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.graphics import Color, Rectangle, Ellipse, Triangle, InstructionGroup
-from kivy.clock import Clock
-from kivy.utils import platform
+# Garante que qualquer erro de importação de biblioteca seja capturado
+try:
+    import json
+    import os
+    from kivy.config import Config
+    Config.set('graphics', 'resizable', 'True')
+
+    from kivy.app import App
+    from kivy.uix.screenmanager import ScreenManager, Screen
+    from kivy.uix.boxlayout import BoxLayout
+    from kivy.uix.label import Label
+    from kivy.uix.button import Button
+    from kivy.uix.popup import Popup
+    from kivy.graphics import Color, Rectangle, Ellipse, Triangle
+    from kivy.clock import Clock
+    from kivy.utils import platform
+
+except Exception as e:
+    with open("crash_log.txt", "w") as f:
+        f.write(traceback.format_exc())
+
 
 # Chave oficial do seu bloco de anúncios (com a barra '/')
 ADMOB_REWARDED_ID = "ca-app-pub-3118010994727094/6454772833"
