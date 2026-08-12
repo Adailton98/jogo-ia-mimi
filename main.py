@@ -14,7 +14,7 @@ try:
     from kivy.uix.label import Label
     from kivy.uix.button import Button
     from kivy.uix.popup import Popup
-    from kivy.graphics import Color, Rectangle, Ellipse, Triangle
+    from kivy.graphics import Color, Rectangle, Ellipse, Triangle, InstructionGroup
     from kivy.clock import Clock
     from kivy.utils import platform
 
@@ -23,9 +23,9 @@ except Exception as e:
         f.write(traceback.format_exc())
 
 
-# Chave oficial do seu bloco de anúncios (com a barra '/')
+# Chaves oficiais AdMob do seu projeto
+ADMOB_PUBLISHER_ID = "ca-app-pub-3118010994727094~5382002346"
 ADMOB_REWARDED_ID = "ca-app-pub-3118010994727094/6454772833"
-
 
 SAVE_FILE = "save_progresso.json"
 AUTORES = "Adailton Santos e Grazzy Santos"
